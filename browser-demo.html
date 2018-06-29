@@ -5,7 +5,8 @@
   <script src="ripple-0.22.0-min.js"></script>
   <script>
     console.log(ripple);
-    var api = new ripple.RippleAPI({server:'wss://s1.ripple.com/'});
+ //  var api = new ripple.RippleAPI({server:'wss://s1.ripple.com/'});
+  var api = new ripple.RippleAPI({server:'wss://s.altnet.rippletest.net'});
     api.connect().then(function() {
         return api.getServerInfo();
     }).then(function(server_info) {
