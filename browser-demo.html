@@ -9,14 +9,33 @@
   var api = new ripple.RippleAPI({server:'wss://s.altnet.rippletest.net:51233'});
     api.connect().then(function() {
 
-//        return api.getServerInfo();
-        return api.generateAddress();
+        return api.getServerInfo();
 
-    }).then(function(address, secret) {
+    }).then(function(server_info) {
 
+
+	account = api.generateAddress();
+	console.log("Generated " + account.address);
 
 	console.log("Address: "+ address + "   Secret: " + secret)
 
+	const address = 'rLyMETeDAYHRs2CVK8Z4C4LMu2rKqT6LDz';
+	api.getAccountInfo(address).then(info => {
+
+		console.log(info);
+	});
+
+
+
+//	const address = 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59';
+
+
+//	return api.getBalances(address).then(balances =>
+//  	{
+
+//		console.log("Balance = " + balances)
+
+//	});
 
 
 //    document.body.innerHTML += "<p>Connected to rippled server!</p>" +
