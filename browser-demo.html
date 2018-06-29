@@ -14,6 +14,7 @@
     }).then(function(server_info) {
 
 
+	balance = 0
 	account = api.generateAddress();
 	console.log("Generated " + account.address);
 
@@ -21,6 +22,7 @@
 	api.getAccountInfo(address).then(acc_info => {
 
 		console.log(acc_info);
+		balance = acc_info.xrpBalance 
 
     document.body.innerHTML += "<p>Connected to rippled server!</p>" +
 "      <table>" +
