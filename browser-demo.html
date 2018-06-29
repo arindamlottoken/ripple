@@ -21,8 +21,6 @@
 	api.getAccountInfo(address).then(acc_info => {
 
 		console.log(acc_info);
-	});
-
 
     document.body.innerHTML += "<p>Connected to rippled server!</p>" +
 "      <table>" +
@@ -39,6 +37,10 @@
 "        <tr><th>Seconds since last ledger validated</th>" +
 "          <td>" + server_info.validatedLedger.age + "</td></tr>" +
 "      </table>";
+
+	});
+
+
 
 
 
