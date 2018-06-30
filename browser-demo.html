@@ -21,8 +21,8 @@
 	const address = 'rLyMETeDAYHRs2CVK8Z4C4LMu2rKqT6LDz';
 	api.getAccountInfo(address).then(acc_info => {
 
-		console.log(acc_info);
-		balance = acc_info.sequence
+		console.log("Account Balance = "+ acc_info.xrpBalance);
+//		balance = acc_info.sequence
 
     document.body.innerHTML += "<p>Connected to rippled server!</p>" +
 "      <table>" +
