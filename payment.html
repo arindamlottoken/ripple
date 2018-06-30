@@ -6,27 +6,6 @@
   <script>
     console.log(ripple);
 
-const RippleAPI = require('ripple-lib').RippleAPI;
-
-const api = new RippleAPI({
-  //server: 'wss://s1.ripple.com' // Public rippled server
-  server: 'wss://s.altnet.rippletest.net:51233'
-});
-
-api.on('error', (errorCode, errorMessage) => {
-  console.log(errorCode + ': ' + errorMessage);
-});
-
-api.on('connected', () => {
-  // console.log('connected');
-});
-
-api.on('disconnected', (code) => {
-  // console.log('disconnected, code:', code);
-  process.exit()
-});
-
-
 const addresses = {
 
     "issuer" : {
@@ -54,7 +33,7 @@ const addresses = {
     }
 }
 
-//var api = new ripple.RippleAPI({server:'wss://s.altnet.rippletest.net:51233'});
+var api = new ripple.RippleAPI({server:'wss://s.altnet.rippletest.net:51233'});
 api.connect().then(() => {
 
   /* begin custom code ------------------------------------ */
