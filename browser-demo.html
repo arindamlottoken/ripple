@@ -14,7 +14,7 @@
     }).then(function(server_info) {
 
 
-	balance = 0
+	xbalance = 0 ; 
 	account = api.generateAddress();
 	console.log("Generated " + account.address);
 
@@ -33,7 +33,7 @@
 "        <tr><th>Generete Secret</th>" +
 "          <td>" + account.secret + "</td></tr>" +
 "        <tr><th>Balance Info</th>" +
-"          <td>" + balance "</td></tr>" +
+"          <td>" + xbalance "</td></tr>" +
 "        <tr><th>Most Recent Validated Ledger Hash</th>" +
 "          <td>" + server_info.validatedLedger.hash + "</td></tr>" +
 "        <tr><th>Seconds since last ledger validated</th>" +
