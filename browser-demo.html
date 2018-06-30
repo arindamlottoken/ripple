@@ -22,7 +22,7 @@
 	api.getAccountInfo(address).then(acc_info => {
 
 		console.log("Account Balance = "+ acc_info.xrpBalance);
-//		balance = acc_info.sequence
+		xbalance = acc_info.xrpBalance;
 
     document.body.innerHTML += "<p>Connected to rippled server!</p>" +
 "      <table>" +
@@ -33,7 +33,7 @@
 "        <tr><th>Generete Secret</th>" +
 "          <td>" + account.secret + "</td></tr>" +
 "        <tr><th>Balance Info</th>" +
-"          <td>" + xbalance "</td></tr>" +
+"          <td>" + xbalance + "</td></tr>" +
 "        <tr><th>Most Recent Validated Ledger Hash</th>" +
 "          <td>" + server_info.validatedLedger.hash + "</td></tr>" +
 "        <tr><th>Seconds since last ledger validated</th>" +
