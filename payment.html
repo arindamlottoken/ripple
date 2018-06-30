@@ -1,4 +1,10 @@
-'use strict';
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.js"></script>
+  <script src="ripple-0.22.0-min.js"></script>
+  <script>
+    console.log(ripple);
 
 const RippleAPI = require('ripple-lib').RippleAPI;
 
@@ -48,6 +54,7 @@ const addresses = {
     }
 }
 
+//var api = new ripple.RippleAPI({server:'wss://s.altnet.rippletest.net:51233'});
 api.connect().then(() => {
 
   /* begin custom code ------------------------------------ */
@@ -145,3 +152,9 @@ api.connect().then(() => {
 
 }).catch(console.error)
 
+  </script>
+
+
+</head>
+<body></body>
+</html>
