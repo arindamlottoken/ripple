@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.js"></script>
+  <script src="ripple-0.22.0-min.js"></script>
+  <script>
+    console.log(ripple);
+ //  var api = new ripple.RippleAPI({server:'wss://s1.ripple.com/'});
+  var api = new ripple.RippleAPI({server:'wss://s.altnet.rippletest.net:51233'});
+
+
+api.on('error', (errorCode, errorMessage) => {
+  console.log(errorCode + ': ' + errorMessage);
+});
+
+api.on('connected', () => {
+  console.log('connected');
+});
+
+api.on('disconnected', (code) => {
+  // console.log('disconnected, code:', code);
+  process.exit()
+});
+
+const addresses = {
+
+    "issuer" : {
+        "name" : "Issuer",
+        "address" : "rQp8Q9S5quQgYPbBZ4AWeoKsyUSa9GHgVA",
+        "secret"  : "shVKQzF5fzEVpMZ983cPerCoFMvNB"
+    },
+
+    "marketmaker" : {
+        "name" : "Market Maker",
+        "address" : "rE4tHWzbhetiDqswsnnUPbwdpZxwGGr9P8",
+        "secret"  : "shkQmhfq9tQvrCHdkp89WqEgpPdVH"
+    },
+
+    "alice" : { 
+        "name" : "Alice",
+        "address" : "rMVqbZvogvTvvH8hWw2NriPdzawkngWT9T",
+        "secret"  : "spmKBXSc7ttBQwkK573bhoj2RNhhL"
+    }, 
+
+    "bob" : { 
+        "name" : "Bob",
+        "address" : "rMKqQMdXnB7dJwTcniYYvAvGw2z1PRF5kH",
+        "secret"  : "ssiwE2dYDucMpm4PMmFxjsEyfLmCu"
+    }
+}
+
+api.connect().then(() => {
+
+  /* begin custom code ------------------------------------ */
+  // Alice
+
+  let payment = {
+    "source": {
+      "address": addresses.issuer.address,
+      "maxAmount": {
+        "value": "100",
+        "currency": "BRL",
+        "counterparty": addresses.issuer.address
+      }
+    },
+    "destination": {
+      "address": addresses.alice.address,
+      "amount": {
+        "value":"100",
+        "currency": "BRL",
+        "counterparty": addresses.issuer.address
+      }
+    }
+  };
+
+  return api.preparePayment(addresses.issuer.address, payment).catch((error) => {
+    
+    console.log("Error:", error)
+    process.exit()
+
+  })
+
+}).then((preparedPayment) => {
+    
+  // console.log(preparedPayment);
+
+  return api.sign(preparedPayment.txJSON, addresses.issuer.secret)
+
+}).then((signedPayment) => {
+
+  // console.log(signedPayment)
+  console.log("TX Id:", signedPayment.id)
+  
+  return api.submit(signedPayment.signedTransaction).catch((error) => {
+    
+    console.log("Error:", error)
+    process.exit()
+
+  })
+
+}).then((submittedPayment) => {
+
+  // console.log(submittedPayment);
+
+  if(submittedPayment.resultCode === "tesSUCCESS") {
+    // https://ripple.com/build/transactions/#full-transaction-response-list
+
+    console.log("Yay! Alice's address was funded successfully!")
+  
+  } else {
+
+    console.log("Something went wrong!", submittedPayment)
+    process.exit()
+
+  }
+
+
+  /* end custom code -------------------------------------- */
+
+}).then(() => {
+
+  /* begin custom code ------------------------------------ */
+  // Bob
+
+  let payment = {
+    "source": {
+      "address": addresses.issuer.address,
+      "maxAmount": {
+        "value": "100",
+        "currency": "USD",
+        "counterparty": addresses.issuer.address
+      }
+    },
+    "destination": {
+      "address": addresses.bob.address,
+      "amount": {
+        "value":"100",
+        "currency": "USD",
+        "counterparty": addresses.issuer.address
+      }
+    }
+  };
+
+  return api.preparePayment(addresses.issuer.address, payment).catch((error) => {
+    
+    console.log("Error:", error)
+    process.exit()
+
+  })
+
+}).then((preparedPayment) => {
+    
+  // console.log(preparedPayment);
+
+  return api.sign(preparedPayment.txJSON, addresses.issuer.secret)
+
+}).then((signedPayment) => {
+
+  // console.log(signedPayment)
+  console.log("TX Id:", signedPayment.id)
+  
+  return api.submit(signedPayment.signedTransaction).catch((error) => {
+    
+    console.log("Error:", error)
+    process.exit()
+
+  })
+
+}).then((submittedPayment) => {
+
+  // console.log(submittedPayment);
+
+  if(submittedPayment.resultCode === "tesSUCCESS") {
+    // https://ripple.com/build/transactions/#full-transaction-response-list
+
+    console.log("Yay! Bob's address was funded successfully!")
+  
+  } else {
+
+    console.log("Something went wrong!", submittedPayment)
+    process.exit()
+
+  }
+
+
+  /* end custom code -------------------------------------- */
+
+}).then(() => {
+
+  /* begin custom code ------------------------------------ */
+  // Market Maker
+
+  let payment = {
+    "source": {
+      "address": addresses.issuer.address,
+      "maxAmount": {
+        "value": "10000",
+        "currency": "BRL",
+        "counterparty": addresses.issuer.address
+      }
+    },
+    "destination": {
+      "address": addresses.marketmaker.address,
+      "amount": {
+        "value":"10000",
+        "currency": "BRL",
+        "counterparty": addresses.issuer.address
+      }
+    }
+  };
+
+  return api.preparePayment(addresses.issuer.address, payment).catch((error) => {
+    
+    console.log("Error:", error)
+    process.exit()
+
+  })
+
+}).then((preparedPayment) => {
+    
+  // console.log(preparedPayment);
+
+  return api.sign(preparedPayment.txJSON, addresses.issuer.secret)
+
+}).then((signedPayment) => {
+
+  // console.log(signedPayment)
+  console.log("TX Id:", signedPayment.id)
+  
+  return api.submit(signedPayment.signedTransaction).catch((error) => {
+    
+    console.log("Error:", error)
+    process.exit()
+
+  })
+
+}).then((submittedPayment) => {
+
+  // console.log(submittedPayment);
+
+  if(submittedPayment.resultCode === "tesSUCCESS") {
+    // https://ripple.com/build/transactions/#full-transaction-response-list
+
+    console.log("Yay! Market Maker's address was funded successfully!")
+  
+  } else {
+
+    console.log("Something went wrong!", submittedPayment)
+    process.exit()
+
+  }
+
+
+  /* end custom code -------------------------------------- */
+
+}).then(() => {
+
+  /* begin custom code ------------------------------------ */
+  // Market Maker
+
+  let payment = {
+    "source": {
+      "address": addresses.issuer.address,
+      "maxAmount": {
+        "value": "10000",
+        "currency": "USD",
+        "counterparty": addresses.issuer.address
+      }
+    },
+    "destination": {
+      "address": addresses.marketmaker.address,
+      "amount": {
+        "value":"10000",
+        "currency": "USD",
+        "counterparty": addresses.issuer.address
+      }
+    }
+  };
+
+  return api.preparePayment(addresses.issuer.address, payment).catch((error) => {
+    
+    console.log("Error:", error)
+    process.exit()
+
+  })
+
+}).then((preparedPayment) => {
+    
+  // console.log(preparedPayment);
+
+  return api.sign(preparedPayment.txJSON, addresses.issuer.secret)
+
+}).then((signedPayment) => {
+
+  // console.log(signedPayment)
+  console.log("TX Id:", signedPayment.id)
+  
+  return api.submit(signedPayment.signedTransaction).catch((error) => {
+    
+    console.log("Error:", error)
+    process.exit()
+
+  })
+
+}).then((submittedPayment) => {
+
+  // console.log(submittedPayment);
+
+  if(submittedPayment.resultCode === "tesSUCCESS") {
+    // https://ripple.com/build/transactions/#full-transaction-response-list
+
+    console.log("Yay! Market Maker's address was funded successfully!")
+  
+  } else {
+
+    console.log("Something went wrong!", submittedPayment)
+    process.exit()
+
+  }
+
+
+  /* end custom code -------------------------------------- */
+
+}).then(() => {
+
+  return api.disconnect()
+
+}).catch(console.error)
+  </script>
+
+  <style type="text/css">
+    td, th { border: 1px solid black; padding: 5px; }
+    table { border-collapse: collapse; }
+  </style>
+
+
+
+</head>
+<body></body>
+</html>
