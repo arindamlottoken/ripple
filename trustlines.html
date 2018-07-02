@@ -1,0 +1,276 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.js"></script>
+  <script src="ripple-0.22.0-min.js"></script>
+  <script>
+    console.log(ripple);
+ //  var api = new ripple.RippleAPI({server:'wss://s1.ripple.com/'});
+  var api = new ripple.RippleAPI({server:'wss://s.altnet.rippletest.net:51233'});
+
+const addresses = {
+
+    "issuer" : {
+        "name" : "Issuer",
+        "address" : "rQp8Q9S5quQgYPbBZ4AWeoKsyUSa9GHgVA",
+        "secret"  : "shVKQzF5fzEVpMZ983cPerCoFMvNB"
+    },
+
+    "marketmaker" : {
+        "name" : "Market Maker",
+        "address" : "rE4tHWzbhetiDqswsnnUPbwdpZxwGGr9P8",
+        "secret"  : "shkQmhfq9tQvrCHdkp89WqEgpPdVH"
+    },
+
+    "alice" : { 
+        "name" : "Alice",
+        "address" : "rMVqbZvogvTvvH8hWw2NriPdzawkngWT9T",
+        "secret"  : "spmKBXSc7ttBQwkK573bhoj2RNhhL"
+    }, 
+
+    "bob" : { 
+        "name" : "Bob",
+        "address" : "rMKqQMdXnB7dJwTcniYYvAvGw2z1PRF5kH",
+        "secret"  : "ssiwE2dYDucMpm4PMmFxjsEyfLmCu"
+    }
+}
+
+api.connect().then(() => {
+
+  /* begin custom code ------------------------------------ */
+  // Alice
+
+  const trustline = {
+    "currency": "BRL",
+    "counterparty": addresses.issuer.address,
+    "limit": "1000000",
+    "ripplingDisabled": true, // In case of issuer false
+    "frozen": false
+  }
+
+  return api.prepareTrustline(addresses.alice.address, trustline).catch((error) => {
+    
+    console.log("Error:", error)
+    return;
+
+  })
+
+}).then((preparedTrustline) => {
+    
+  // console.log(preparedTrustline);
+
+  return api.sign(preparedTrustline.txJSON, addresses.alice.secret)
+
+}).then((signedTrustline) => {
+
+  // console.log(signedTrustline)
+  console.log("TX Id:", signedTrustline.id)
+  
+  return api.submit(signedTrustline.signedTransaction).catch((error) => {
+    
+    console.log("Error:", error)
+    return;
+
+  })
+
+}).then((submittedTrustline) => {
+
+  // console.log(submittedTrustline);
+
+  if(submittedTrustline.resultCode === "tesSUCCESS") {
+    // https://ripple.com/build/transactions/#full-transaction-response-list
+
+    console.log("Alice's trustline created successfully!")
+  
+  } else {
+
+    console.log("Something went wrong!", submittedTrustline)
+    return;
+
+  }
+
+
+  /* end custom code -------------------------------------- */
+
+}).then(() => {
+
+  /* begin custom code ------------------------------------ */
+  // Bob
+
+  const trustline = {
+    "currency": "USD",
+    "counterparty": addresses.issuer.address,
+    "limit": "1000000",
+    "ripplingDisabled": true, // In case of issuer false
+    "frozen": false
+  }
+
+  return api.prepareTrustline(addresses.bob.address, trustline).catch((error) => {
+    
+    console.log("Error:", error)
+    return;
+
+  })
+
+}).then((preparedTrustline) => {
+    
+  // console.log(preparedTrustline);
+
+  return api.sign(preparedTrustline.txJSON, addresses.bob.secret)
+
+}).then((signedTrustline) => {
+
+  // console.log(signedTrustline)
+  console.log("TX Id:", signedTrustline.id)
+  
+  return api.submit(signedTrustline.signedTransaction).catch((error) => {
+    
+    console.log("Error:", error)
+    return;
+
+  })
+
+}).then((submittedTrustline) => {
+
+  // console.log(submittedTrustline);
+
+  if(submittedTrustline.resultCode === "tesSUCCESS") {
+    // https://ripple.com/build/transactions/#full-transaction-response-list
+
+    console.log("Bob's trustline created successfully!")
+  
+  } else {
+
+    console.log("Something went wrong!", submittedTrustline)
+    return;
+
+  }
+
+
+  /* end custom code -------------------------------------- */
+
+}).then(() => {
+
+  /* begin custom code ------------------------------------ */
+  // Market Maker
+
+  const trustline = {
+    "currency": "USD",
+    "counterparty": addresses.issuer.address,
+    "limit": "1000000",
+    "ripplingDisabled": true, // In case of issuer false
+    "frozen": false
+  }
+
+  return api.prepareTrustline(addresses.marketmaker.address, trustline).catch((error) => {
+    
+    console.log("Error:", error)
+    return;
+
+  })
+
+}).then((preparedTrustline) => {
+    
+  // console.log(preparedTrustline);
+
+  return api.sign(preparedTrustline.txJSON, addresses.marketmaker.secret)
+
+}).then((signedTrustline) => {
+
+  // console.log(signedTrustline)
+  console.log("TX Id:", signedTrustline.id)
+  
+  return api.submit(signedTrustline.signedTransaction).catch((error) => {
+    
+    console.log("Error:", error)
+    return;
+
+  })
+
+}).then((submittedTrustline) => {
+
+  // console.log(submittedTrustline);
+
+  if(submittedTrustline.resultCode === "tesSUCCESS") {
+    // https://ripple.com/build/transactions/#full-transaction-response-list
+
+    console.log("Market Makers's trustline created successfully!")
+  
+  } else {
+
+    console.log("Something went wrong!", submittedTrustline)
+    return;
+
+  }
+
+
+  /* end custom code -------------------------------------- */
+
+}).then(() => {
+
+  /* begin custom code ------------------------------------ */
+  // Market Maker
+
+  const trustline = {
+    "currency": "BRL",
+    "counterparty": addresses.issuer.address,
+    "limit": "1000000",
+    "ripplingDisabled": true, // In case of issuer false
+    "frozen": false
+  }
+
+  return api.prepareTrustline(addresses.marketmaker.address, trustline).catch((error) => {
+    
+    console.log("Error:", error)
+    return;
+
+  })
+
+}).then((preparedTrustline) => {
+    
+  // console.log(preparedTrustline);
+
+  return api.sign(preparedTrustline.txJSON, addresses.marketmaker.secret)
+
+}).then((signedTrustline) => {
+
+  // console.log(signedTrustline)
+  console.log("TX Id:", signedTrustline.id)
+  
+  return api.submit(signedTrustline.signedTransaction).catch((error) => {
+    
+    console.log("Error:", error)
+    return;
+
+  })
+
+}).then((submittedTrustline) => {
+
+  // console.log(submittedTrustline);
+
+  if(submittedTrustline.resultCode === "tesSUCCESS") {
+    // https://ripple.com/build/transactions/#full-transaction-response-list
+
+    console.log("Market Makers's trustline created successfully!")
+  
+  } else {
+
+    console.log("Something went wrong!", submittedTrustline)
+    return;
+
+  }
+
+  /* end custom code -------------------------------------- */
+
+}).then(() => {
+
+  return api.disconnect()
+
+}).catch(console.error)
+
+</script>
+</head>
+<body></body>
+</html>
