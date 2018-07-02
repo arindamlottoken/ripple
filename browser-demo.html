@@ -48,7 +48,7 @@ return api.getTransaction(id).then(transaction => {
 "        <tr><th>Most Recent Validated Ledger Hash</th>" +
 "          <td>" + server_info.validatedLedger.hash + "</td></tr>" +
 "        <tr><th> Blurb </th>" +
-"          <td>" + transaction.memos.data + "</td></tr>" +
+"          <td>" + transaction.specification.memos[0].data + "</td></tr>" +
 "      </table>";
 
 	});
