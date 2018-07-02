@@ -33,6 +33,8 @@
 const id = '335AF6BCDCA78A5198E876E41761F1B14BEA379F041F9093A4C7668B0F17F05E';
 return api.getTransaction(id).then(transaction => {
 
+	console.log(transaction);
+
     document.body.innerHTML += "<p>Connected to rippled server!</p>" +
 "      <table>" +
 "        <tr><th>Version</th>" +
